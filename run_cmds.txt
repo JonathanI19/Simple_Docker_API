@@ -1,0 +1,9 @@
+HOW TO RUN CONTAINERS AND CONNECT VIA NETWORK:
+
+docker network create my-network
+docker container run -d --name mongodb -p 27017:27017 --network my-network mongodb:latest
+docker container run --name flask-app -d -p 5000:5000 --network my-network flask_mongodb:latest
+
+
+EXAMPLE QUERY VIA URL:
+http://localhost:5000/search/names?name=Tom+Hardy

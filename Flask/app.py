@@ -132,6 +132,65 @@ def search_roles():
     # Use json_util to handle MongoDB specific objects (like ObjectId)
     return json_util.dumps(matching_records), 200  
 
+@app.route('/search', methods=['GET'])
+def search_basic():
+    
+    # Get query parameters from the request
+    name = request.args.get('name')
+
+    # Get the collection
+    collection = mongo.db.names
+
+    # Initialize query dictionary
+    query1 = {}
+    query2 = {}
+
+    # Check if name or id is provided in the request
+    if name:
+        query1['name'] = name
+
+    else:
+        return '<h1>Invalid: Missing Name Argument</h1>'
+        
+    # Perform the query
+    results = collection.find(query1)  
+
+    # Convert the cursor to a list of dictionaries
+    matching_records = list(results)
+
+    if not matching_records:
+        return f'<h1>No Result For Name = {name}</h1>'
+
+    name_id = matching_records[0]['name_id']
+
+    collection = mongo.db.roles
+
+    query2['name_id'] = name_id
+
+    results = collection.find(query2)
+
+    matching_records = list(results)
+
+    # return f"<h2>{matching_records}</h2>"
+    output = []
+
+    for item in matching_records:
+        output.append(item['title_id'])
+
+    query3 = {"title_id": {"$in": output}}
+    collection = mongo.db.titles
+
+    results = collection.find(query3, {"title":1, "_id":0})
+
+    matching_records = list(results)
+
+    return f"<h2>{matching_records}</h2>"
+
+
+
+    # Use json_util to handle MongoDB specific objects (like ObjectId)
+    # return json_util.dumps(matching_records), 200
+
 
 
 if __name__ == "__main__":

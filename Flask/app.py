@@ -149,7 +149,7 @@ def search_basic():
         query1['name'] = name
 
     else:
-        return '<h1>Invalid: Missing Name Argument</h1>'
+        return jsonify({"results": [{"title": "Name Required For Search"}]})
         
     # Perform the query
     results = collection.find(query1)  
@@ -157,7 +157,7 @@ def search_basic():
     # Convert the cursor to a list of dictionaries
     matching_records = list(results)
     if not matching_records:
-        return f'<h1>No Result For Name = {name}</h1>'
+        return jsonify({"results": [{"title": f"No results found for {name}"}]})
 
     name_id = matching_records[0]['name_id']
 

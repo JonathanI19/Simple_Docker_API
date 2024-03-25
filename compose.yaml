@@ -1,0 +1,32 @@
+version: '3'
+services:
+  flaskapp:
+    build: ./Flask
+    image: myflask:latest
+    volumes:
+      - ./Flask:/app
+      - ./Flask/templates:/app/templates
+    ports:
+      - "5000:5000"
+    networks:
+      - my-network
+  nginx:
+    build: ./web_server
+    image: mynginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - flaskapp
+    networks:
+     - my-network
+  mongo:
+    build: ./movie_db
+    image: mymongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+     - my-network
+
+networks:
+  my-network:
+    driver: bridge

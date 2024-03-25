@@ -1,15 +1,15 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, jsonify
 from flask_pymongo import PyMongo
 from bson import json_util
 import re
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://admin:pass@mongodb:27017/movie_db?authSource=admin"
+app.config["MONGO_URI"] = "mongodb://admin:pass@mongo:27017/movie_db?authSource=admin"
 mongo = PyMongo(app)
 
 @app.route('/')
-def default():
-    return '<h1>Hello, you are connected</h1>'
+def index():
+    return render_template('index.html')
 
 @app.route('/search/names', methods=['GET'])
 def search_names():
@@ -176,7 +176,8 @@ def search_basic():
     matching_records = list(results)
 
     # Formatted return
-    return f"<h2>{matching_records}</h2>"
+    # return f"<h2>{matching_records}</h2>"
+    return jsonify({"results": matching_records})
 
 
 

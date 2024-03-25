@@ -138,10 +138,8 @@ def search_basic():
     # Get query parameters from the request
     name = request.args.get('name')
 
-    # Get the collection
+    # Get the collection and initialize first two queries
     collection = mongo.db.names
-
-    # Initialize query dictionary
     query1 = {}
     query2 = {}
 
@@ -157,33 +155,27 @@ def search_basic():
 
     # Convert the cursor to a list of dictionaries
     matching_records = list(results)
-
     if not matching_records:
         return f'<h1>No Result For Name = {name}</h1>'
 
     name_id = matching_records[0]['name_id']
 
+    # Querying roles of with matching name_id
     collection = mongo.db.roles
-
     query2['name_id'] = name_id
-
     results = collection.find(query2)
-
     matching_records = list(results)
-
-    # return f"<h2>{matching_records}</h2>"
     output = []
-
     for item in matching_records:
         output.append(item['title_id'])
 
+    # Querying titles with matching title_id
     query3 = {"title_id": {"$in": output}}
     collection = mongo.db.titles
-
     results = collection.find(query3, {"title":1, "_id":0})
-
     matching_records = list(results)
 
+    # Formatted return
     return f"<h2>{matching_records}</h2>"
 
 

@@ -9,7 +9,8 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    pass
+    # return render_template('index.html')
 
 @app.route('/search/names', methods=['GET'])
 def search_names():

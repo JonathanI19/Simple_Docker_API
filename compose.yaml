@@ -5,7 +5,6 @@ services:
     image: myflask:latest
     volumes:
       - ./Flask:/app
-      - ./Flask/templates:/app/templates
     ports:
       - "5000:5000"
     networks:

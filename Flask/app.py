@@ -146,7 +146,8 @@ def search_basic():
 
     # Check if name or id is provided in the request
     if name:
-        query1['name'] = name
+        regex_pattern = re.compile(f"^{name}$", re.IGNORECASE)
+        query1['name'] = regex_pattern
 
     else:
         return jsonify({"results": [{"title": "Name Required For Search"}]})
